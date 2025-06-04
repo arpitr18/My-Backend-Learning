@@ -4,7 +4,7 @@
   "description": "Here we will learn about complete in depth Backend",
   "license": "ISC",
   "author": "",
-  "type": "module",
+  "type": "commonjs",
   "main": "index.js",
   "scripts": {
     "dev" : "nodemon index.js"
