@@ -91,4 +91,104 @@ myServer.listen(PORT, () => {
 
 ```
 ## Path Modules
+```javascript
+const path = require('path');
 
+console.log('Current directory:', __dirname);
+console.log('Current file:', __filename);
+
+const filePath = path.join("folders" , "students", 'example.txt');
+
+const resolvedPath = path.resolve(filePath);
+console.log('Resolved path:', resolvedPath);  
+
+const extname = path.extname(filePath);
+console.log('File extension:', extname);
+
+const basename = path.basename(filePath);
+console.log('Base name:', basename);
+
+const dirname = path.dirname(filePath);
+console.log('Directory name:', dirname);
+
+const parsedPath = path.parse(filePath);
+console.log('Parsed path:', parsedPath);
+
+const formatPath = path.format(parsedPath);
+console.log('Formatted path:', formatPath);
+
+const isAbsolute = path.isAbsolute(filePath);
+console.log('Is absolute path:', isAbsolute);
+
+const relativePath = path.relative(__dirname, filePath);
+console.log('Relative path:', relativePath);
+
+const normalizedPath = path.normalize('folders/../students/example.txt');
+console.log('Normalized path:', normalizedPath);  
+
+```
+## Events in nodeJS
+
+```Javascript
+const EventEmitter = require('events');
+
+const emitter = new EventEmitter();
+// Function to handle the 'message' event 
+
+// on(eventName , listener) -- create
+ emitter.on("Greet" , (args)=>{
+    console.log(`Hello ${args.name}! , You are ${args.age} years old.`);
+ })
+// emit(eventName, [args]}) -- executes
+emitter.emit("Greet" , {
+    name: "Arpit",
+    age: 20
+});
+```
+
+## Streams in nodeJS
+
+pipe method apne left mein and right mein kis type ke streams accept karta hai ?
+readable <-- pipe --> writeable
+
+req : readable stream hota hai 
+res : writeable stream hota hia 
+
+```javascript
+const stream = require("stream");
+const http = require("http");
+const fs = require("fs");
+
+const server = http.createServer((req, res) => {
+  // |1. Downloading a file in a bad way ❌
+
+  const file = fs.readFileSync("streams.txt");
+
+  res.end(file);
+
+  // |2. Downloading a file in a good way ✅
+
+  const readable = fs.createReadStream("streams.txt");
+  readable.pipe(res);
+  res.end();
+
+  // |3. Copying a file in a bad way ❌
+  const files = fs.readFileSync("streams.txt");
+  fs.writeFileSync("copy.txt", files);
+  res.end("File copied successfully");
+
+  // |4. Copying a file in a good way ✅
+  const readableS = fs.createReadStream("streams.txt");
+  const writableS = fs.createWriteStream("copy2.txt");
+
+  readableS.on("data", (chunk) => {
+    // console.log(chunk);
+    writableS.write(chunk);
+  });
+});
+
+server.listen(3000, () => {
+  console.log("Server is listening on port 3000");
+});
+
+```
